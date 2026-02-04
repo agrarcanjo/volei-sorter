@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
             variant="primary"
             size="large"
             fullWidth
-            onPress={() => console.log('Sortear Times')}
+            onPress={() => navigation.navigate('TeamSortConfig')}
           />
           
           <CustomButton
@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
             variant="primary"
             size="large"
             fullWidth
-            onPress={() => console.log('Sortear Números')}
+            onPress={() => navigation.navigate('NumberSortConfig')}
           />
           
           <CustomButton
@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
             variant="primary"
             size="large"
             fullWidth
-            onPress={() => console.log('Próximos Jogadores')}
+            onPress={() => navigation.navigate('NextPlayersConfig')}
           />
 
           {/* Botão para Demo de Componentes */}
@@ -69,7 +69,7 @@ const HomeScreen = ({ navigation }) => {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: theme.colors.textSecondary }]}>
-            Versão 1.0.0 - Fase 2 em Progresso
+            Versão 1.0.0 - Fase 3 Completa
           </Text>
         </View>
       </View>

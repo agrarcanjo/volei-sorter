@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
   interpolate,
   Extrapolate,
+  withSequence,
 } from 'react-native-reanimated';
 import { useTheme } from '../context/ThemeContext';
 import { hapticMedium } from '../utils/haptics';
@@ -36,9 +37,15 @@ const Card = ({
 
   // Anima para estado virado ou não virado
   useEffect(() => {
-    rotation.value = withTiming(isFlipped ? 180 : 0, {
-      duration: 400,
-    });
+    if (isFlipped) {
+      // Adiciona um pequeno "bounce" ao virar
+      rotation.value = withSequence(
+        withTiming(170, { duration: 350 }),
+        withTiming(180, { duration: 50 })
+      );
+    } else {
+      rotation.value = withTiming(0, { duration: 400 });
+    }
   }, [isFlipped]);
 
   // Estilo animado da frente do card

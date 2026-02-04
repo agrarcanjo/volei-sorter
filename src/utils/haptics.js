@@ -52,3 +52,20 @@ export const hapticError = () => {
     console.log('Haptic feedback not available');
   }
 };
+
+/**
+ * Sequência de vibração para celebração (revelar todos)
+ */
+export const hapticCelebration = async () => {
+  try {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setTimeout(async () => {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    }, 100);
+    setTimeout(async () => {
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }, 200);
+  } catch (error) {
+    console.log('Haptic feedback not available');
+  }
+};

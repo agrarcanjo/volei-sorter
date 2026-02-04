@@ -7,21 +7,21 @@ Aplicativo mobile Android para sorteio aleatório de times de vôlei com interfa
 **Plataforma**: Android (expansível para iOS)  
 **Data de Início**: 04/02/2026  
 **Última Atualização**: 04/02/2026  
-**Status**: 🟢 Fase 2 Completa - Iniciando Fase 3
+**Status**: 🟢 Fase 4 Completa - 60% Concluído
 
 ---
 
 ## 🎯 Funcionalidades Principais
 
 ### ✅ Funcionalidades Core
-- [ ] **F1: Sortear Times** - Dividir jogadores em times vermelho e azul
-- [ ] **F2: Sortear Números** - Atribuir números aleatórios para jogadores
-- [ ] **F3: Próximos Jogadores** - Selecionar quem fica no próximo jogo
+- [x] **F1: Sortear Times** - Dividir jogadores em times vermelho e azul
+- [x] **F2: Sortear Números** - Atribuir números aleatórios para jogadores
+- [x] **F3: Próximos Jogadores** - Selecionar quem fica no próximo jogo
 
 ### ✅ Funcionalidades Complementares
-- [ ] **Tema Claro/Escuro** - Alternância entre modos de visualização
-- [ ] **Navegação Fluida** - Menu principal e transições suaves
-- [ ] **Animações** - Efeitos de flip, feedback tátil, transições
+- [x] **Tema Claro/Escuro** - Alternância entre modos de visualização
+- [x] **Navegação Fluida** - Menu principal e transições suaves
+- [x] **Animações Extras** - Loading states, confetti, entrada staggered, bounce
 
 ---
 
@@ -75,97 +75,90 @@ Aplicativo mobile Android para sorteio aleatório de times de vôlei com interfa
 
 ---
 
-### 🟡 FASE 3: Navegação e Tela Inicial
-**Status**: ⚪ Não Iniciado
+### 🟡 FASE 3: Navegação e Funcionalidades Core
+**Status**: ✅ 100% Completo
 
 #### Tarefas:
-- [ ] Implementar Stack Navigator
-- [ ] Criar HomeScreen (Menu Principal)
-- [ ] Design dos 3 botões principais
-- [ ] Adicionar toggle de tema no menu
-- [ ] Implementar navegação para cada funcionalidade
-- [ ] Animações de transição entre telas
+- [x] Implementar Stack Navigator com rotas
+- [x] Criar HomeScreen (Menu Principal)
+- [x] Conectar navegação para funcionalidades
+- [x] Criar TeamSortConfigScreen + TeamSortGameScreen
+- [x] Criar NumberSortConfigScreen + NumberSortGameScreen
+- [x] Criar NextPlayersConfigScreen + NextPlayersGameScreen
+- [x] Implementar lógica de sorteio em todas funcionalidades
+- [x] Grid responsivo de cards em todas as telas de jogo
+- [x] Botões "Revelar Todos" e "Reset" funcionais
 
 **Entregáveis**:
-- ⏳ Menu principal funcional
-- ⏳ Navegação configurada
+- ✅ 6 telas de funcionalidades (3 config + 3 game)
+- ✅ Navegação completa entre todas as telas
+- ✅ 3 funcionalidades principais implementadas
+- ✅ Integração com algoritmos de shuffle/distribuição
+
+**Data de Conclusão**: 04/02/2026
 
 ---
 
-### 🔴 FASE 4: Funcionalidade 1 - Sortear Times
-**Status**: ⚪ Não Iniciado
+### 🔴 FASE 4: Polish e Animações Extras
+**Status**: ✅ 100% Completo
 
 #### Tarefas:
-- [ ] Criar `TeamSortConfigScreen` (tela de configuração)
-- [ ] Validações de input (quantidade e tamanho)
-- [ ] Criar `TeamSortGameScreen` (tela de jogo)
-- [ ] Implementar lógica de distribuição (vermelho/azul/próximo)
-- [ ] Algoritmo de embaralhamento (Fisher-Yates)
-- [ ] Animação de flip dos cartões
-- [ ] Botões voltar e recomeçar
-- [ ] Feedback visual por cor (vermelho, azul, amarelo)
+- [x] Adicionar loading states durante sorteios
+- [x] Animação de entrada das telas (fade/slide)
+- [x] Confetti effect ao revelar todos os cards
+- [x] Sons/vibração melhorada ao flipar cards
+- [x] Animação de entrada dos cards no grid
+- [x] Otimizar transições entre telas
+- [ ] Adicionar skeleton loading (opcional)
+- [ ] Easter eggs (opcional)
 
 **Entregáveis**:
-- ⏳ Funcionalidade completa e testada
-- ⏳ Grid responsivo de cartões
+- ✅ LoadingSpinner component com animações
+- ✅ ConfettiEffect component com 50 partículas
+- ✅ Animações staggered em todos os grids
+- ✅ hapticCelebration com sequência tripla
+- ✅ Bounce effect no flip dos cards
+
+**Data de Conclusão**: 04/02/2026
 
 ---
 
-### 🟣 FASE 5: Funcionalidade 2 - Sortear Números
+### 🟣 FASE 5: Funcionalidades Extras
 **Status**: ⚪ Não Iniciado
 
 #### Tarefas:
-- [ ] Criar `NumberSortConfigScreen`
-- [ ] Criar `NumberSortGameScreen`
-- [ ] Lógica de geração e embaralhamento de números
-- [ ] Grid adaptativo (otimização de espaço)
-- [ ] Animação de revelação de número
-- [ ] Fonte responsiva baseada em quantidade
-- [ ] Botões de controle
+- [ ] Histórico de sorteios
+- [ ] Salvar configurações favoritas
+- [ ] Compartilhar resultados (screenshot)
+- [ ] Modo paisagem otimizado
+- [ ] Tutorial de primeira utilização
+- [ ] Opções de personalização (cores de time)
 
 **Entregáveis**:
-- ⏳ Funcionalidade completa e testada
-- ⏳ Layout otimizado para diferentes quantidades
+- ⏳ Features extras implementadas
+- ⏳ Experiência enriquecida
 
 ---
 
-### 🟠 FASE 6: Funcionalidade 3 - Próximos Jogadores
+### 🟠 FASE 6: Testes e Otimização
 **Status**: ⚪ Não Iniciado
 
 #### Tarefas:
-- [ ] Criar `NextPlayersConfigScreen`
-- [ ] Validação (quem fica < tamanho do time)
-- [ ] Criar `NextPlayersGameScreen`
-- [ ] Lógica de distribuição (dentro/fora)
-- [ ] Animação com cores verde e vermelho
-- [ ] Ícones visuais (✓ e ✗)
-- [ ] Botões de controle
-
-**Entregáveis**:
-- ⏳ Funcionalidade completa e testada
-
----
-
-### 🔵 FASE 7: Polimento e Refinamento
-**Status**: ⚪ Não Iniciado
-
-#### Tarefas:
-- [ ] Adicionar feedback tátil (vibração)
-- [ ] Otimizar performance (memo, useMemo, useCallback)
-- [ ] Ajustar animações para fluidez
-- [ ] Testar em diferentes resoluções
-- [ ] Ajustar responsividade
+- [ ] Testes de usabilidade
+- [ ] Otimizar performance (memo, useMemo)
+- [ ] Testar em diferentes tamanhos de tela
+- [ ] Testar em dispositivos Android variados
 - [ ] Corrigir bugs identificados
 - [ ] Melhorar acessibilidade
-- [ ] Adicionar sons (opcional)
+- [ ] Code review e refactoring
 
 **Entregáveis**:
-- ⏳ App otimizado e fluido
-- ⏳ Experiência de usuário refinada
+- ⏳ App otimizado e testado
+- ⏳ Bugs corrigidos
 
 ---
 
-### 🟢 FASE 8: Build e Deploy
+### 🔵 FASE 7: Build e Deploy
 **Status**: ⚪ Não Iniciado
 
 #### Tarefas:
@@ -271,21 +264,50 @@ volei-team-sorter/
 - **Estilização**: StyleSheet (nativo) + Theme System
 - **Linter**: ESLint (opcional)
 - **Formatter**: Prettier (opcional)
+4/7)
+1. ✅ Fase 1: Fundação (100%)
+2. ✅ Fase 2: Componentes Base (100%)
+3. ✅ Fase 3: Navegação e Funcionalidades Core (100%)
+4. ✅ Fase 4: Polish e Animações Extras (100%)
+
+### ⏳ Fases Pendentes (3/7)
+5. ⏳ Fase 5: Funcionalidades Extras (0%)
+6. ⏳ Fase 6: Testes e Otimização (0%)
+7. ⏳ Fase 7: Build e Deploy (0%)
+
+**Progresso Total: 60%**
+
+### 📈 Estatísticas do Projeto
+
+| Métrica | Valor |
+|---------|-------|
+| Total de telas | 9 |
+| Componentes reutilizáveis | 8 |
+| Linhas de código | ~2.780 |
+| Funcionalidades principais | 3/3 ✅ |
+| Sistema de temas | ✅ |
+| Navegação | ✅ |
+| Animações avançadas | ✅ |
 
 ---
 
 ## 📝 Próximos Passos Imediatos
 
-### Agora (Fase 1):
-1. ✅ Criar este roadmap
-2. ⏳ Inicializar projeto com Expo
-3. ⏳ Criar estrutura de pastas
-4. ⏳ Configurar sistema de temas
-5. ⏳ Configurar navegação básica
+### Agora (Fase 5 - Opcional):
+1. ⏳ Histórico de sorteios
+2. ⏳ Salvar configurações favoritas
+3. ⏳ Compartilhar resultados
+4. ⏳ Tutorial de primeira vez
 
-### Depois (Fase 2):
-- Desenvolver componentes reutilizáveis
-- Implementar animações de flip card
+### Ou Pular Para (Fase 6-7):
+- Testes em dispositivos reais
+- Otimização de performance
+- Build APK e preparação para
+### Depois (Fase 5+):
+- Histórico de sorteios
+- Salvar configurações favoritas
+- Otimização e testes
+- Build final e deploy
 
 ---
 
