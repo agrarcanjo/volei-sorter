@@ -109,8 +109,6 @@ Aplicativo mobile Android para sorteio aleatório de times de vôlei com interfa
 - [x] Sons/vibração melhorada ao flipar cards
 - [x] Animação de entrada dos cards no grid
 - [x] Otimizar transições entre telas
-- [ ] Adicionar skeleton loading (opcional)
-- [ ] Easter eggs (opcional)
 
 **Entregáveis**:
 - ✅ LoadingSpinner component com animações
@@ -127,12 +125,9 @@ Aplicativo mobile Android para sorteio aleatório de times de vôlei com interfa
 **Status**: ⚪ Não Iniciado
 
 #### Tarefas:
-- [ ] Histórico de sorteios
 - [ ] Salvar configurações favoritas
-- [ ] Compartilhar resultados (screenshot)
 - [ ] Modo paisagem otimizado
-- [ ] Tutorial de primeira utilização
-- [ ] Opções de personalização (cores de time)
+- [ ] Adicionar skeleton loading 
 
 **Entregáveis**:
 - ⏳ Features extras implementadas
@@ -144,13 +139,11 @@ Aplicativo mobile Android para sorteio aleatório de times de vôlei com interfa
 **Status**: ⚪ Não Iniciado
 
 #### Tarefas:
-- [ ] Testes de usabilidade
 - [ ] Otimizar performance (memo, useMemo)
 - [ ] Testar em diferentes tamanhos de tela
-- [ ] Testar em dispositivos Android variados
 - [ ] Corrigir bugs identificados
 - [ ] Melhorar acessibilidade
-- [ ] Code review e refactoring
+- [ ] Salvar configurações de valores default dos jogadores e time das funcionalidades 1 e 3
 
 **Entregáveis**:
 - ⏳ App otimizado e testado
@@ -166,7 +159,6 @@ Aplicativo mobile Android para sorteio aleatório de times de vôlei com interfa
 - [ ] Criar ícone do app
 - [ ] Criar splash screen
 - [ ] Build de desenvolvimento (APK)
-- [ ] Testes em dispositivo físico
 - [ ] Build de produção
 - [ ] Documentação de instalação
 - [ ] (Opcional) Publicar na Play Store

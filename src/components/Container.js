@@ -30,17 +30,7 @@ const Container = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.background}
       />
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: theme.colors.background },
-          padding && { padding: theme.spacing.md },
-          center && styles.center,
-          style,
-        ]}
-      >
-        {children}
-      </View>
+      {children}
     </SafeAreaView>
   );
 };

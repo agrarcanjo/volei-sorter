@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions, useWindowDimensions } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Container, Header, Card, CustomButton, LoadingSpinner, ConfettiEffect } from '../../components/index.js';
@@ -7,18 +7,11 @@ import { shuffleArray, distributeTeams } from '../../utils/shuffle.js';
 import { hapticCelebration } from '../../utils/haptics.js';
 
 const PADDING = 16;
-const MIN_CARDS_PER_ROW = 4;
+const MIN_CARDS_PER_ROW = 3;
 
 const getGridConfig = (width) => {
   // Calcula número de cards por linha baseado na largura
-  let cardsPerRow = MIN_CARDS_PER_ROW;
-  
-  if (width > 600) {
-    cardsPerRow = 5;
-  }
-  if (width > 750) {
-    cardsPerRow = 6;
-  }
+  const cardsPerRow = MIN_CARDS_PER_ROW;
   
   const totalPadding = PADDING * 2 + (cardsPerRow - 1) * 8; // padding + gaps entre cards
   const cardSize = (width - totalPadding) / cardsPerRow;
@@ -35,35 +28,36 @@ export default function TeamSortGameScreen({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   
-  const { cardsPerRow, cardSize } = getGridConfig(dimensions.width);
+  const { cardsPerRow, cardSize } = useMemo(() => getGridConfig(dimensions.width), [dimensions.width]);
 
-  // Initialize teams on first render
-  useEffect(() => {
-    handleShuffle();
-  }, []);
-
-  const handleShuffle = async () => {
+  const handleShuffle = useCallback(async () => {
     setIsLoading(true);
     setShowConfetti(false);
+    setFlippedCards([]); // Limpa cards virados ANTES
     
     // Simular delay para mostrar loading
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    const players = Array.from({ length: playerCount }, (_, i) => i + 1);
-    const shuffled = shuffleArray(players);
-    const distributed = distributeTeams(shuffled, teamSize);
+    const distributed = distributeTeams(playerCount, teamSize);
     setTeams(distributed);
-    setFlippedCards([]);
     setIsLoading(false);
-  };
+  }, [playerCount, teamSize]);
 
-  const handleCardFlip = (index) => {
-    if (!flippedCards.includes(index)) {
-      setFlippedCards([...flippedCards, index]);
-    }
-  };
+  // Initialize teams on first render
+  useEffect(() => {
+    handleShuffle();
+  }, [handleShuffle]);
 
-  const handleFlipAll = () => {
+  const handleCardFlip = useCallback((index) => {
+    setFlippedCards(prev => {
+      if (!prev.includes(index)) {
+        return [...prev, index];
+      }
+      return prev;
+    });
+  }, []);
+
+  const handleFlipAll = useCallback(() => {
     if (!teams) return;
     const allIndices = Array.from({ length: playerCount }, (_, i) => i);
     setFlippedCards(allIndices);
@@ -72,31 +66,31 @@ export default function TeamSortGameScreen({ navigation, route }) {
     
     // Esconder confetti após 4 segundos
     setTimeout(() => setShowConfetti(false), 4000);
-  };
+  }, [teams, playerCount]);
 
-  const getCardColor = (index) => {
+  const getCardColor = useCallback((index) => {
     if (!teams || !teams[index]) return theme.colors.primary;
     
     if (teams[index] === 'red') {
-      return theme.colors.teamRed;
+      return '#EF5350';
     } else if (teams[index] === 'blue') {
-      return theme.colors.teamBlue;
+      return '#42A5F5';
     } else {
-      return theme.colors.next;
+      return '#FFC107';
     }
-  };
+  }, [teams, theme.colors.primary]);
 
-  const getCardLabel = (index) => {
+  const getCardLabel = useCallback((index) => {
     if (!teams || !teams[index]) return '';
     
     if (teams[index] === 'red') {
-      return 'TIME VERMELHO';
+      return 'TIME\nVERMELHO';
     } else if (teams[index] === 'blue') {
-      return 'TIME AZUL';
+      return 'TIME\nAZUL';
     } else {
       return 'PRÓXIMO';
     }
-  };
+  }, [teams]);
 
   if (!teams) {
     return (
@@ -130,15 +124,15 @@ export default function TeamSortGameScreen({ navigation, route }) {
               <Card
                 isFlipped={flippedCards.includes(index)}
                 onFlip={() => handleCardFlip(index)}
-                backgroundColor={flippedCards.includes(index) ? getCardColor(index) : undefined}
+                backgroundColor={getCardColor(index)}
                 size={{ width: cardSize, height: cardSize }}
                 frontContent={
                   <View style={styles.cardFront}>
-                    <Text style={styles.cardNumber}>{index + 1}</Text>
+                    <Text style={styles.questionMark}>?</Text>
                   </View>
                 }
                 backContent={
-                  <View style={styles.cardBack}>
+                  <View style={styles.cardFront}>
                     <Text style={styles.cardLabel}>{getCardLabel(index)}</Text>
                   </View>
                 }
@@ -183,18 +177,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardNumber: {
-    fontSize: 48,
+    fontSize: 36,
+    marginBottom: 4,
+  },
+  cardPlayerNumber: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
-  },
-  cardBack: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
+    marginBottom: 8,
   },
   cardLabel: {
-    fontSize: 14,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+  questionMark: {
+    fontSize: 64,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',

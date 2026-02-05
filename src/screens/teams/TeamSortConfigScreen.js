@@ -1,26 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Container, Header, NumberPicker, CustomButton } from '../../components/index.js';
 import { useTheme } from '../../context/ThemeContext.js';
+import { loadDefaultSettings } from '../../utils/storage.js';
 
 export default function TeamSortConfigScreen({ navigation }) {
   const { theme } = useTheme();
-  const [playerCount, setPlayerCount] = useState(6);
-  const [teamSize, setTeamSize] = useState(3);
+  const [playerCount, setPlayerCount] = useState(12);
+  const [teamSize, setTeamSize] = useState(6);
+
+  // Carrega valores padrão das configurações
+  useEffect(() => {
+    const loadConfig = async () => {
+      const defaults = await loadDefaultSettings();
+      setPlayerCount(defaults.teamSortPlayers);
+      setTeamSize(defaults.teamSortPlayersPerTeam);
+    };
+    loadConfig();
+  }, []);
 
   const handleStart = () => {
     navigation.navigate('TeamSortGame', { playerCount, teamSize });
   };
 
   return (
-    <Container padding>
+    <Container padding={false}>
       <Header 
         title="Sortear Times"
         onBack={() => navigation.goBack()}
         showBack
       />
       
-      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        scrollEnabled={true}
+      >
         <View style={styles.content}>
         <Text style={[styles.description, { color: theme.colors.textSecondary }]}>
           Configure quantos jogadores irão participar e o tamanho de cada time
@@ -75,11 +92,11 @@ export default function TeamSortConfigScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    flex: 1,
+    paddingHorizontal: 16,
   },
   content: {
     paddingTop: 20,
-    paddingBottom: 80,
+    paddingBottom: 120,
   },
   description: {
     fontSize: 16,

@@ -1,26 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Container, Header, NumberPicker, CustomButton } from '../../components/index.js';
 import { useTheme } from '../../context/ThemeContext.js';
+import { loadDefaultSettings } from '../../utils/storage.js';
 
 export default function NextPlayersConfigScreen({ navigation }) {
   const { theme } = useTheme();
-  const [playerCount, setPlayerCount] = useState(10);
-  const [stayCount, setStayCount] = useState(6);
+  const [playerCount, setPlayerCount] = useState(5);
+  const [stayCount, setStayCount] = useState(3);
+
+  // Carrega valores padrão das configurações
+  useEffect(() => {
+    const loadConfig = async () => {
+      const defaults = await loadDefaultSettings();
+      setPlayerCount(defaults.nextPlayersTotal);
+      setStayCount(defaults.nextPlayersStay);
+    };
+    loadConfig();
+  }, []);
 
   const handleStart = () => {
     navigation.navigate('NextPlayersGame', { playerCount, stayCount });
   };
 
   return (
-    <Container padding>
+    <Container padding={false}>
       <Header 
         title="Próximos Jogadores"
         onBack={() => navigation.goBack()}
         showBack
       />
       
-      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        scrollEnabled={true}
+      >
         <View style={styles.content}>
         <Text style={[styles.description, { color: theme.colors.textSecondary }]}>
           Defina quantos jogadores ficam em quadra e quantos saem
@@ -73,11 +90,11 @@ export default function NextPlayersConfigScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    flex: 1,
+    paddingHorizontal: 16,
   },
   content: {
     paddingTop: 20,
-    paddingBottom: 80,
+    paddingBottom: 120,
   },
   description: {
     fontSize: 16,

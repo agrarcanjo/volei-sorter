@@ -26,8 +26,9 @@ export const generateNumberArray = (count) => {
 
 /**
  * Distribui jogadores em times vermelho, azul e próximo
+ * Cria um array com labels de times e embaralha de forma aleatória
  */
-export const distributeTeams = (totalPlayers, teamSize) => {
+export const distributeTeams = (playerCount, teamSize) => {
   const teams = [];
   
   // Time Vermelho
@@ -41,11 +42,12 @@ export const distributeTeams = (totalPlayers, teamSize) => {
   }
   
   // Próximos (jogadores que sobraram)
-  const remainingPlayers = totalPlayers - (teamSize * 2);
+  const remainingPlayers = playerCount - (teamSize * 2);
   for (let i = 0; i < remainingPlayers; i++) {
     teams.push('next');
   }
   
+  // Embaralha usando Fisher-Yates para distribuição aleatória
   return shuffleArray(teams);
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Container, CustomButton, ThemeToggle } from '../components';
 import { useTheme } from '../context/ThemeContext';
 
@@ -12,9 +12,18 @@ const HomeScreen = ({ navigation }) => {
   return (
     <Container center>
       <View style={styles.content}>
-        {/* Header com Toggle */}
+        {/* Header com Toggle e Configurações */}
         <View style={styles.header}>
-          <ThemeToggle showLabel={true} />
+          <View style={{ flex: 1 }} />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Settings')}
+            style={styles.settingsButton}
+            accessibilityLabel="Configurações"
+            accessibilityRole="button"
+          >
+            <Text style={styles.settingsIcon}>⚙️</Text>
+          </TouchableOpacity>
+          <ThemeToggle showLabel={false} />
         </View>
 
         {/* Logo/Título */}
@@ -53,23 +62,12 @@ const HomeScreen = ({ navigation }) => {
             fullWidth
             onPress={() => navigation.navigate('NextPlayersConfig')}
           />
-
-          {/* Botão para Demo de Componentes */}
-          <View style={styles.divider} />
-          
-          <CustomButton
-            title="🎨 Ver Componentes"
-            variant="outline"
-            size="medium"
-            fullWidth
-            onPress={() => navigation.navigate('ComponentsDemo')}
-          />
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={[styles.footerText, { color: theme.colors.textSecondary }]}>
-            Versão 1.0.0 - Fase 3 Completa
+            Versão 1.0.0
           </Text>
         </View>
       </View>
@@ -84,8 +82,17 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   header: {
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
     marginBottom: 32,
+    gap: 12,
+  },
+  settingsButton: {
+    padding: 8,
+  },
+  settingsIcon: {
+    fontSize: 28,
   },
   logoContainer: {
     alignItems: 'center',

@@ -114,6 +114,9 @@ const CustomButton = ({
         fullWidth && styles.fullWidth,
         style,
       ]}
+      accessibilityLabel={title}
+      accessibilityHint={disabled ? 'Botão desabilitado' : loading ? 'Carregando...' : `Toque para ${title.toLowerCase()}`}
+      accessibilityRole="button"
     >
       {loading ? (
         <ActivityIndicator color={colors.text} size="small" />
@@ -159,4 +162,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomButton;
+export default React.memo(CustomButton);

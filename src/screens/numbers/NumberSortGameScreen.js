@@ -7,19 +7,11 @@ import { shuffleArray } from '../../utils/shuffle.js';
 import { hapticCelebration } from '../../utils/haptics.js';
 
 const PADDING = 16;
-const MIN_CARDS_PER_ROW = 4;
+const MIN_CARDS_PER_ROW = 3;
 
 const getGridConfig = (width) => {
   // Calcula número de cards por linha baseado na largura
-  let cardsPerRow = MIN_CARDS_PER_ROW;
-  
-  if (width > 600) {
-    cardsPerRow = 5;
-  }
-  if (width > 750) {
-    cardsPerRow = 6;
-  }
-  
+  const cardsPerRow = MIN_CARDS_PER_ROW;
   const totalPadding = PADDING * 2 + (cardsPerRow - 1) * 8; // padding + gaps entre cards
   const cardSize = (width - totalPadding) / cardsPerRow;
   
@@ -45,14 +37,14 @@ export default function NumberSortGameScreen({ navigation, route }) {
   const handleShuffle = async () => {
     setIsLoading(true);
     setShowConfetti(false);
+    setFlippedCards([]); // Limpa cards virados ANTES
     
     // Simular delay para mostrar loading
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    const numberArray = generateNumberArray(playerCount);
+    const numberArray = Array.from({ length: playerCount }, (_, i) => i + 1);
     const shuffled = shuffleArray(numberArray);
     setNumbers(shuffled);
-    setFlippedCards([]);
     setIsLoading(false);
   };
 

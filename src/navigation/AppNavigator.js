@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
 import ComponentsDemo from '../screens/ComponentsDemo';
+import SettingsScreen from '../screens/SettingsScreen';
 import TeamSortConfigScreen from '../screens/teams/TeamSortConfigScreen.js';
 import TeamSortGameScreen from '../screens/teams/TeamSortGameScreen.js';
 import NumberSortConfigScreen from '../screens/numbers/NumberSortConfigScreen.js';
@@ -22,22 +23,8 @@ const AppNavigator = () => {
         initialRouteName="Home"
         screenOptions={{
           headerShown: false,
-          cardStyle: { backgroundColor: 'transparent' },
           animationEnabled: true,
-          cardStyleInterpolator: ({ current, layouts }) => {
-            return {
-              cardStyle: {
-                transform: [
-                  {
-                    translateX: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.width, 0],
-                    }),
-                  },
-                ],
-              },
-            };
-          },
+          presentation: 'card',
         }}
       >
         <Stack.Screen 
@@ -85,6 +72,13 @@ const AppNavigator = () => {
           name="NextPlayersGame" 
           component={NextPlayersGameScreen}
           options={{ title: 'Próximos Jogadores' }}
+        />
+        
+        {/* Settings */}
+        <Stack.Screen 
+          name="Settings" 
+          component={SettingsScreen}
+          options={{ title: 'Configurações' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

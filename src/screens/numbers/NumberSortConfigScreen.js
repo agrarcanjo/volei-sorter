@@ -1,25 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Container, Header, NumberPicker, CustomButton } from '../../components/index.js';
 import { useTheme } from '../../context/ThemeContext.js';
+import { loadDefaultSettings } from '../../utils/storage.js';
 
 export default function NumberSortConfigScreen({ navigation }) {
   const { theme } = useTheme();
-  const [playerCount, setPlayerCount] = useState(6);
+  const [playerCount, setPlayerCount] = useState(12);
+
+  // Carrega valores padrão das configurações
+  useEffect(() => {
+    const loadConfig = async () => {
+      const defaults = await loadDefaultSettings();
+      setPlayerCount(defaults.numberSortPlayers);
+    };
+    loadConfig();
+  }, []);
 
   const handleStart = () => {
     navigation.navigate('NumberSortGame', { playerCount });
   };
 
   return (
-    <Container padding>
+    <Container padding={false}>
       <Header 
         title="Sortear Números"
         onBack={() => navigation.goBack()}
         showBack
       />
       
-      <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+        scrollEnabled={true}
+      >
         <View style={styles.content}>
         <Text style={[styles.description, { color: theme.colors.textSecondary }]}>
           Sorteie números aleatórios para cada jogador
@@ -59,11 +75,11 @@ export default function NumberSortConfigScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    flex: 1,
+    paddingHorizontal: 16,
   },
   content: {
     paddingTop: 20,
-    paddingBottom: 80,
+    paddingBottom: 120,
   },
   description: {
     fontSize: 16,

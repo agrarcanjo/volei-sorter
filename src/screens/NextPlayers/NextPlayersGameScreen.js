@@ -7,19 +7,11 @@ import { shuffleArray, distributeNextPlayers } from '../../utils/shuffle.js';
 import { hapticCelebration } from '../../utils/haptics.js';
 
 const PADDING = 16;
-const MIN_CARDS_PER_ROW = 4;
+const MIN_CARDS_PER_ROW = 3;
 
 const getGridConfig = (width) => {
   // Calcula número de cards por linha baseado na largura
-  let cardsPerRow = MIN_CARDS_PER_ROW;
-  
-  if (width > 600) {
-    cardsPerRow = 5;
-  }
-  if (width > 750) {
-    cardsPerRow = 6;
-  }
-  
+  const cardsPerRow = MIN_CARDS_PER_ROW;
   const totalPadding = PADDING * 2 + (cardsPerRow - 1) * 8; // padding + gaps entre cards
   const cardSize = (width - totalPadding) / cardsPerRow;
   
@@ -45,15 +37,13 @@ export default function NextPlayersGameScreen({ navigation, route }) {
   const handleShuffle = async () => {
     setIsLoading(true);
     setShowConfetti(false);
+    setFlippedCards([]); // Limpa cards virados ANTES
     
     // Simular delay para mostrar loading
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    const playerList = Array.from({ length: playerCount }, (_, i) => i + 1);
-    const shuffled = shuffleArray(playerList);
-    const distributed = distributeNextPlayers(shuffled, stayCount);
+    const distributed = distributeNextPlayers(playerCount, stayCount);
     setPlayers(distributed);
-    setFlippedCards([]);
     setIsLoading(false);
   };
 
@@ -88,9 +78,9 @@ export default function NextPlayersGameScreen({ navigation, route }) {
     if (!players || !players[index]) return '';
     
     if (players[index] === 'inside') {
-      return '✓\nFICA';
+      return 'FICA';
     } else {
-      return '✗\nSAI';
+      return 'SAI';
     }
   };
 
@@ -126,15 +116,15 @@ export default function NextPlayersGameScreen({ navigation, route }) {
               <Card
                 isFlipped={flippedCards.includes(index)}
                 onFlip={() => handleCardFlip(index)}
-                backgroundColor={flippedCards.includes(index) ? getCardColor(index) : undefined}
+                backgroundColor={getCardColor(index)}
                 size={{ width: cardSize, height: cardSize }}
                 frontContent={
                   <View style={styles.cardFront}>
-                    <Text style={styles.cardNumber}>{index + 1}</Text>
+                    <Text style={styles.questionMark}>?</Text>
                   </View>
                 }
                 backContent={
-                  <View style={styles.cardBack}>
+                  <View style={styles.cardFront}>
                     <Text style={styles.cardLabel}>{getCardLabel(index)}</Text>
                   </View>
                 }
@@ -178,23 +168,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  cardEmoji: {
+    fontSize: 36,
+    marginBottom: 4,
+  },
   cardNumber: {
-    fontSize: 48,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
-  },
-  cardBack: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
+    marginBottom: 4,
   },
   cardLabel: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
-    lineHeight: 28,
+  },
+  questionMark: {
+    fontSize: 64,
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
   },
   footer: {
     position: 'absolute',
