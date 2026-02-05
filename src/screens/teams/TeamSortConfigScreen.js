@@ -37,6 +37,9 @@ export default function TeamSortConfigScreen({ navigation }) {
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
         scrollEnabled={true}
+        bounces={true}
+        alwaysBounceVertical={true}
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.content}>
         <Text style={[styles.description, { color: theme.colors.textSecondary }]}>

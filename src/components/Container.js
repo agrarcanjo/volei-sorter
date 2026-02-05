@@ -30,7 +30,16 @@ const Container = ({
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={theme.colors.background}
       />
-      {children}
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: theme.colors.background },
+          center && styles.center,
+          style,
+        ]}
+      >
+        {children}
+      </View>
     </SafeAreaView>
   );
 };

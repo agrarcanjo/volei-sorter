@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
     padding: 24,
+    alignSelf: 'center',
   },
   header: {
     flexDirection: 'row',

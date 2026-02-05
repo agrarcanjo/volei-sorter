@@ -63,6 +63,9 @@ const SettingsScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
         scrollEnabled={true}
+        bounces={true}
+        alwaysBounceVertical={true}
+        keyboardShouldPersistTaps="handled"
       >
         {/* Funcionalidade 1 - Sorteio de Times */}
         <View style={[styles.section, { backgroundColor: theme.colors.cardBackground }]}>
@@ -160,10 +163,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    flexGrow: 1,
     padding: 20,
     gap: 20,
-    paddingBottom: 40,
+    paddingBottom: 80,
   },
   section: {
     padding: 20,
