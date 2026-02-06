@@ -20,19 +20,20 @@ const getPlayerSkillAverage = (player) => {
  */
 const validateDistribution = (players, teamSize, fixedSetter, womenPerTeam) => {
   const totalPlayers = players.length;
-  
-  // Verificar se é múltiplo do tamanho do time
-  if (totalPlayers < teamSize || totalPlayers % teamSize !== 0) {
+  const fullTeams = Math.floor(totalPlayers / teamSize);
+
+  // Verificar se há jogadores suficientes para no mínimo 2 times completos
+  if (totalPlayers < teamSize * 2 || fullTeams < 2) {
     return {
       valid: false,
-      error: `Total de ${totalPlayers} jogadores não é divisível por ${teamSize}`,
+      error: `Mínimo de ${teamSize * 2} jogadores selecionados para sortear`,
     };
   }
 
   // Verificar setters se fixedSetter está ativado
   if (fixedSetter) {
-    const numTeams = totalPlayers / teamSize;
-    const setters = players.filter(p => p.position === 'levantador').length;
+    const numTeams = fullTeams;
+    const setters = players.filter(p => p.position === 'Levantador').length;
     
     if (setters < numTeams) {
       return {
@@ -44,7 +45,7 @@ const validateDistribution = (players, teamSize, fixedSetter, womenPerTeam) => {
 
   // Verificar mulheres se configurado
   if (womenPerTeam > 0) {
-    const numTeams = totalPlayers / teamSize;
+    const numTeams = fullTeams;
     const women = players.filter(p => p.gender === 'fem').length;
     
     if (women < numTeams * womenPerTeam) {
@@ -74,19 +75,25 @@ const distributePlayersToTeams = (
     throw new Error(validation.error);
   }
 
-  const numTeams = players.length / teamSize;
-  const teams = Array.from({ length: numTeams }, () => []);
+  const totalPlayers = players.length;
+  const fullTeams = Math.floor(totalPlayers / teamSize);
+  const remainder = totalPlayers % teamSize;
+  const totalTeams = fullTeams + (remainder > 0 ? 1 : 0);
+  const teams = Array.from({ length: totalTeams }, () => []);
+  const capacities = Array.from({ length: totalTeams }, (_, idx) =>
+    idx < fullTeams ? teamSize : remainder
+  );
 
   // 1. Se fixedSetter, separar levantadores
   let remainingPlayers = [...players];
-  const setters = remainingPlayers.filter(p => p.position === 'levantador');
-  let playersWithoutSetters = remainingPlayers.filter(p => p.position !== 'levantador');
+  const setters = remainingPlayers.filter(p => p.position === 'Levantador');
+  let playersWithoutSetters = remainingPlayers.filter(p => p.position !== 'Levantador');
 
   // Distribuir um levantador em cada time
   if (fixedSetter && setters.length > 0) {
     const shuffledSetters = setters.sort(() => Math.random() - 0.5);
-    shuffledSetters.forEach((setter, index) => {
-      teams[index % numTeams].push(setter);
+    shuffledSetters.slice(0, fullTeams).forEach((setter, index) => {
+      teams[index % fullTeams].push(setter);
     });
     remainingPlayers = playersWithoutSetters;
   }
@@ -101,7 +108,7 @@ const distributePlayersToTeams = (
     
     // Distribuir mulheres primeiro
     const womenPerTeamNeeded = Math.ceil(womenPerTeam);
-    for (let teamIdx = 0; teamIdx < numTeams; teamIdx++) {
+    for (let teamIdx = 0; teamIdx < fullTeams; teamIdx++) {
       const teamNeedsWomen = womenPerTeamNeeded - teams[teamIdx].filter(p => p.gender === 'fem').length;
       for (let i = 0; i < teamNeedsWomen && women.length > 0; i++) {
         const womanIdx = Math.floor(Math.random() * women.length);
@@ -121,23 +128,35 @@ const distributePlayersToTeams = (
   // 4. Distribuir por habilidade com fator de aleatoriedade
   const sortedBySkill = playersWithSkill.sort((a, b) => b.skillAverage - a.skillAverage);
 
-  sortedBySkill.forEach(player => {
-    // Decidir baseado em aleatoriedade
-    if (Math.random() * 100 < randomnessFactor) {
-      // Sorteio aleatório
-      const teamIdx = Math.floor(Math.random() * numTeams);
-      if (teams[teamIdx].length < teamSize) {
-        teams[teamIdx].push(player);
-      }
-    } else {
-      // Adicionar ao time com menos jogadores (snake draft pattern)
-      const teamWithLeast = teams.reduce((minTeam, team, idx) => {
-        return team.length < teams[minTeam].length ? idx : minTeam;
-      }, 0);
+  const getTeamSkillSum = (team) =>
+    team.reduce((sum, p) => sum + getPlayerSkillAverage(p), 0);
 
-      if (teams[teamWithLeast].length < teamSize) {
-        teams[teamWithLeast].push(player);
-      }
+  sortedBySkill.forEach(player => {
+    const availableTeams = teams
+      .map((team, idx) => ({ team, idx }))
+      .filter(({ team, idx }) => team.length < capacities[idx]);
+
+    if (availableTeams.length === 0) {
+      return;
+    }
+
+    if (Math.random() * 100 < randomnessFactor) {
+      const randomIdx = Math.floor(Math.random() * availableTeams.length);
+      teams[availableTeams[randomIdx].idx].push(player);
+    } else {
+      const target = availableTeams.reduce((best, current) => {
+        const bestCount = best.team.length;
+        const currentCount = current.team.length;
+
+        if (currentCount < bestCount) return current;
+        if (currentCount > bestCount) return best;
+
+        const bestSkill = getTeamSkillSum(best.team);
+        const currentSkill = getTeamSkillSum(current.team);
+        return currentSkill < bestSkill ? current : best;
+      }, availableTeams[0]);
+
+      teams[target.idx].push(player);
     }
   });
 

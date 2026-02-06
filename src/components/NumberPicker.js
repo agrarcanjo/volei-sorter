@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { hapticLight } from '../utils/haptics';
 
@@ -25,6 +25,8 @@ const NumberPicker = ({
   disabled = false,
 }) => {
   const { theme } = useTheme();
+  const [isEditing, setIsEditing] = useState(false);
+  const [tempValue, setTempValue] = useState(String(value));
 
   const handleDecrement = () => {
     if (!disabled && value > min) {
@@ -38,6 +40,34 @@ const NumberPicker = ({
       hapticLight();
       onValueChange(value + step);
     }
+  };
+
+  const handleStartEdit = () => {
+    if (!disabled) {
+      setIsEditing(true);
+      setTempValue(String(value));
+    }
+  };
+
+  const handleEndEdit = () => {
+    setIsEditing(false);
+    const numValue = parseInt(tempValue, 10);
+    
+    if (!isNaN(numValue)) {
+      // Garante que o valor está dentro dos limites
+      const clampedValue = Math.max(min, Math.min(max, numValue));
+      onValueChange(clampedValue);
+      setTempValue(String(clampedValue));
+    } else {
+      // Se não for um número válido, volta ao valor anterior
+      setTempValue(String(value));
+    }
+  };
+
+  const handleChangeText = (text) => {
+    // Permite apenas números
+    const cleaned = text.replace(/[^0-9]/g, '');
+    setTempValue(cleaned);
   };
 
   const decrementDisabled = disabled || value <= min;
@@ -79,20 +109,46 @@ const NumberPicker = ({
         </TouchableOpacity>
 
         {/* Valor */}
-        <View style={styles.valueContainer}>
-          <Text
-            style={[
-              styles.value,
-              {
-                color: disabled ? theme.colors.textSecondary : theme.colors.text,
-                fontSize: theme.fontSizes.xxl,
-                fontWeight: theme.fontWeights.bold,
-              },
-            ]}
-          >
-            {value}
-          </Text>
-        </View>
+        <TouchableOpacity 
+          style={styles.valueContainer}
+          onPress={handleStartEdit}
+          activeOpacity={0.7}
+          disabled={disabled}
+        >
+          {isEditing ? (
+            <TextInput
+              style={[
+                styles.valueInput,
+                {
+                  color: theme.colors.text,
+                  fontSize: theme.fontSizes.xxl,
+                  fontWeight: theme.fontWeights.bold,
+                },
+              ]}
+              value={tempValue}
+              onChangeText={handleChangeText}
+              onBlur={handleEndEdit}
+              onSubmitEditing={handleEndEdit}
+              keyboardType="number-pad"
+              selectTextOnFocus
+              autoFocus
+              maxLength={String(max).length}
+            />
+          ) : (
+            <Text
+              style={[
+                styles.value,
+                {
+                  color: disabled ? theme.colors.textSecondary : theme.colors.text,
+                  fontSize: theme.fontSizes.xxl,
+                  fontWeight: theme.fontWeights.bold,
+                },
+              ]}
+            >
+              {value}
+            </Text>
+          )}
+        </TouchableOpacity>
 
         {/* Botão Incrementar */}
         <TouchableOpacity
@@ -161,6 +217,12 @@ const styles = StyleSheet.create({
   },
   value: {
     textAlign: 'center',
+  },
+  valueInput: {
+    textAlign: 'center',
+    width: '100%',
+    padding: 0,
+    margin: 0,
   },
   limitsContainer: {
     flexDirection: 'row',

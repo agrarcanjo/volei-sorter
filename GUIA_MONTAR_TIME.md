@@ -15,7 +15,7 @@
    - **Gênero**: Masculino, Feminino ou deixar em branco
    - **Posição**: Levantador, Ponta, Oposto, Central ou Líbero
    - **Habilidades** (1-10 estrelas):
-     - Levantamento
+     - levante
      - Ataque
      - Defesa
      - Bloqueio

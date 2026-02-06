@@ -60,7 +60,7 @@ const config = await loadTeamConfig() // TeamConfig
   gender: 'masc' | 'fem' | '',
   position: 'levantador' | 'ponta' | 'oposto' | 'central' | 'libero' | '',
   skills: {
-    levantamento: 0-10,
+    levante: 0-10,
     ataque: 0-10,
     defesa: 0-10,
     bloqueio: 0-10
@@ -285,7 +285,7 @@ npx expo start     # Scan QR com Expo Go
 
 ## 💡 Dicas
 
-1. **Skill Média**: (levantamento + ataque + defesa + bloqueio) / 4
+1. **Skill Média**: (levante + ataque + defesa + bloqueio) / 4
 2. **Levantador**: position === 'levantador'
 3. **Gênero**: 'masc' | 'fem' | ''
 4. **Persistência**: Automática com AsyncStorage

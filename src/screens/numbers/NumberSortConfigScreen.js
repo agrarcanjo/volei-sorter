@@ -52,7 +52,7 @@ export default function NumberSortConfigScreen({ navigation }) {
             value={playerCount}
             onValueChange={setPlayerCount}
             min={2}
-            max={30}
+            max={99}
           />
         </View>
 

@@ -82,7 +82,7 @@ MonteTimeSortResultScreen (effect)
   gender: 'masc' | 'fem' | '',   // Opcional
   position: string,              // Uma das 5 posições
   skills: {
-    levantamento: 0-10,          // Integer
+    levante: 0-10,          // Integer
     ataque: 0-10,
     defesa: 0-10,
     bloqueio: 0-10
@@ -154,7 +154,7 @@ if (womenPerTeam > 0) {
 ```javascript
 playersWithSkill = players.map(p => ({
   ...p,
-  skillAverage: (levantamento + ataque + defesa + bloqueio) / 4
+  skillAverage: (levante + ataque + defesa + bloqueio) / 4
 }))
 
 sortados = sort(playersWithSkill, descrescente por skillAverage)

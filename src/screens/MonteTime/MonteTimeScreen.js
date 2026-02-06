@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Container, Header, CustomButton } from '../../components';
 import { useTheme } from '../../context/ThemeContext';
-import { loadPlayers, deletePlayer, loadTeamConfig } from '../../utils/playerStorage';import { validateDistribution, getPlayerSkillAverage } from '../../utils/teamSortAlgorithm';
+import {
+  loadPlayers,
+  deletePlayer,
+  loadTeamConfig,
+  loadSelectedPlayerIds,
+  saveSelectedPlayerIds,
+} from '../../utils/playerStorage';
+import { getPlayerSkillAverage } from '../../utils/teamSortAlgorithm';
 /**
  * Tela de Montar Time - Lista de Jogadores
  */
@@ -11,6 +18,7 @@ const MonteTimeScreen = ({ navigation }) => {
   const [players, setPlayers] = useState([]);
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState(new Set());
 
   useEffect(() => {
     loadData();
@@ -21,8 +29,17 @@ const MonteTimeScreen = ({ navigation }) => {
   const loadData = useCallback(async () => {
     const loadedPlayers = await loadPlayers();
     const loadedConfig = await loadTeamConfig();
+    const savedSelectedIds = await loadSelectedPlayerIds();
+
     setPlayers(loadedPlayers);
     setConfig(loadedConfig);
+
+    if (savedSelectedIds && savedSelectedIds.length > 0) {
+      setSelectedIds(new Set(savedSelectedIds));
+    } else {
+      setSelectedIds(new Set(loadedPlayers.map(p => p.id)));
+    }
+
     setLoading(false);
   }, []);
 
@@ -36,54 +53,88 @@ const MonteTimeScreen = ({ navigation }) => {
 
   const handleDeletePlayer = useCallback(async (playerId) => {
     await deletePlayer(playerId);
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(playerId);
+      return next;
+    });
     loadData();
   }, [loadData]);
 
+  const toggleSelectPlayer = useCallback((playerId) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(playerId)) {
+        next.delete(playerId);
+      } else {
+        next.add(playerId);
+      }
+      return next;
+    });
+  }, []);
+
+  const selectedPlayers = useMemo(
+    () => players.filter(p => selectedIds.has(p.id)),
+    [players, selectedIds]
+  );
+
   const canSort = useCallback(() => {
-    if (!config || players.length === 0) return false;
-    const { teamSize, fixedSetter, womenPerTeam } = config;
+    if (!config || selectedPlayers.length === 0) return false;
+    const { teamSize } = config;
     const minPlayers = teamSize * 2;
-    
-    if (players.length < minPlayers) return false;
-    if (players.length % teamSize !== 0) return false;
-    
-    if (fixedSetter) {
-      const setterCount = players.filter(p => p.position === 'levantador').length;
-      const teamsNeeded = players.length / teamSize;
-      if (setterCount < teamsNeeded) return false;
-    }
-    
-    return true;
-  }, [players, config]);
+    return selectedPlayers.length >= minPlayers;
+  }, [selectedPlayers, config]);
+
+  const handleSortTeams = useCallback(async () => {
+    await saveSelectedPlayerIds(Array.from(selectedIds));
+    navigation.navigate('MonteTimeSortResult', {
+      selectedIds: Array.from(selectedIds),
+    });
+  }, [navigation, selectedIds]);
 
   const renderPlayerItem = ({ item }) => {
     const genderLabel = item.gender === 'fem' ? '♀' : item.gender === 'masc' ? '♂' : '';
-    const skillAvg = item.skills ? 
-      Math.round((item.skills.levantamento + item.skills.ataque + item.skills.defesa + item.skills.bloqueio) / 4) : 
-      0;
+    const skillAvg = item.skills ? Math.round(getPlayerSkillAverage(item)) : 0;
+    const isSelected = selectedIds.has(item.id);
 
     return (
-      <TouchableOpacity
+      <View
         style={[styles.playerItem, { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border }]}
-        onPress={() => handleEditPlayer(item)}
       >
-        <View style={styles.playerContent}>
+        <TouchableOpacity
+          onPress={() => toggleSelectPlayer(item.id)}
+          style={[
+            styles.selectBox,
+            {
+              borderColor: theme.colors.border,
+              backgroundColor: isSelected ? theme.colors.primary : 'transparent',
+            },
+          ]}
+        >
+          {isSelected && <Text style={styles.selectCheck}>✓</Text>}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.playerContent}
+          onPress={() => handleEditPlayer(item)}
+        >
           <View>
             <Text style={[styles.playerName, { color: theme.colors.text }]}>
-              {item.position === 'levantador' && '🏐 '} {item.name} {genderLabel}
+              {item.position === 'Levantador' && '🏐 '} {item.name} {genderLabel}
             </Text>
             <Text style={[styles.playerSubtitle, { color: theme.colors.textSecondary }]}>
               {item.position || 'Sem posição'} • Skill: {skillAvg}/10
             </Text>
           </View>
-          <TouchableOpacity
-            onPress={() => handleDeletePlayer(item.id)}
-            style={styles.deleteButton}
-          >
-            <Text style={[styles.deleteIcon, { color: theme.colors.danger }]}>✕</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => handleDeletePlayer(item.id)}
+          style={styles.deleteButton}
+        >
+          <Text style={[styles.deleteIcon, { color: theme.colors.danger }]}>✕</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -135,7 +186,7 @@ const MonteTimeScreen = ({ navigation }) => {
       <View style={[styles.footer, { backgroundColor: theme.colors.cardBackground, borderTopColor: theme.colors.border }]}>
         <CustomButton
           title="Sortear Time"
-          onPress={() => navigation.navigate('MonteTimeSortResult')}
+          onPress={handleSortTeams}
           variant="primary"
           size="large"
           fullWidth
@@ -178,11 +229,28 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     marginBottom: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  selectBox: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectCheck: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '700',
   },
   playerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    flex: 1,
   },
   playerName: {
     fontSize: 16,

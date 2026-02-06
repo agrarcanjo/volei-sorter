@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const KEYS = {
   PLAYERS: '@montetime_players',
   TEAM_CONFIG: '@montetime_team_config',
+  SELECTED_PLAYERS: '@montetime_selected_players',
 };
 
 /**
@@ -14,7 +15,7 @@ export const createPlayer = (name, id = Date.now()) => ({
   gender: '', // 'masc' | 'fem'
   position: '', // 'levantador' | 'ponta' | 'oposto' | 'central' | 'libero'
   skills: {
-    levantamento: 0,
+    levante: 0,
     ataque: 0,
     defesa: 0,
     bloqueio: 0,
@@ -118,5 +119,27 @@ export const loadTeamConfig = async () => {
   } catch (error) {
     console.error('Erro ao carregar configuração:', error);
     return createTeamConfig();
+  }
+};
+
+// ===== JOGADORES SELECIONADOS =====
+
+export const saveSelectedPlayerIds = async (playerIds) => {
+  try {
+    await AsyncStorage.setItem(KEYS.SELECTED_PLAYERS, JSON.stringify(playerIds));
+    return true;
+  } catch (error) {
+    console.error('Erro ao salvar jogadores selecionados:', error);
+    return false;
+  }
+};
+
+export const loadSelectedPlayerIds = async () => {
+  try {
+    const data = await AsyncStorage.getItem(KEYS.SELECTED_PLAYERS);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Erro ao carregar jogadores selecionados:', error);
+    return [];
   }
 };

@@ -254,7 +254,7 @@ HomeScreen
   "gender": "masc",
   "position": "levantador",
   "skills": {
-    "levantamento": 9,
+    "levante": 9,
     "ataque": 5,
     "defesa": 6,
     "bloqueio": 5

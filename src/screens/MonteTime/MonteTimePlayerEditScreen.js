@@ -4,12 +4,12 @@ import { Container, Header, CustomButton } from '../../components';
 import { useTheme } from '../../context/ThemeContext';
 import { loadPlayers, addPlayer, updatePlayer, createPlayer } from '../../utils/playerStorage';
 
-const POSITIONS = ['levantador', 'ponta', 'oposto', 'central', 'libero'];
+const POSITIONS = ['Levantador', 'Ponta', 'Oposto', 'Central', 'Libero'];
 const GENDERS = [
   { label: 'Masculino', value: 'masc' },
   { label: 'Feminino', value: 'fem' },
 ];
-const SKILLS = ['levantamento', 'ataque', 'defesa', 'bloqueio'];
+const SKILLS = ['levante', 'ataque', 'defesa', 'bloqueio'];
 
 /**
  * Tela de Edição/Adição de Jogador
@@ -22,7 +22,7 @@ const MonteTimePlayerEditScreen = ({ navigation, route }) => {
   const [gender, setGender] = useState('');
   const [position, setPosition] = useState('');
   const [skills, setSkills] = useState({
-    levantamento: 0,
+    levante: 0,
     ataque: 0,
     defesa: 0,
     bloqueio: 0,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   starsContainer: {
     flexDirection: 'row',
-    gap: 2,
+    gap: 15,
   },
   starButton: {
     padding: 2,

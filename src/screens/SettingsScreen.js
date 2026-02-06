@@ -81,7 +81,7 @@ const SettingsScreen = ({ navigation }) => {
               value={teamSortPlayers}
               onValueChange={setTeamSortPlayers}
               min={2}
-              max={50}
+              max={99}
             />
           </View>
 
@@ -112,7 +112,7 @@ const SettingsScreen = ({ navigation }) => {
               value={numberSortPlayers}
               onValueChange={setNumberSortPlayers}
               min={2}
-              max={50}
+              max={99}
             />
           </View>
         </View>
@@ -131,7 +131,7 @@ const SettingsScreen = ({ navigation }) => {
               value={nextPlayersTotal}
               onValueChange={setNextPlayersTotal}
               min={2}
-              max={30}
+              max={99}
             />
           </View>
 

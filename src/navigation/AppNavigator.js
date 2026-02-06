@@ -41,20 +41,20 @@ const AppNavigator = () => {
           component={ComponentsDemo}
           options={{ title: 'Demonstração de Componentes' }}
         />
-        
-        {/* Team Sort Flow */}
         <Stack.Screen 
           name="TeamSortConfig" 
           component={TeamSortConfigScreen}
           options={{ title: 'Configurar Times' }}
         />
+
+        {/* Funcionalidade 1 - Team Sort Flow */}
         <Stack.Screen 
           name="TeamSortGame" 
           component={TeamSortGameScreen}
           options={{ title: 'Sortear Times' }}
         />
-        
-        {/* Number Sort Flow */}
+
+        {/* Funcionalidade 2 - Number Sort Flow */}
         <Stack.Screen 
           name="NumberSortConfig" 
           component={NumberSortConfigScreen}

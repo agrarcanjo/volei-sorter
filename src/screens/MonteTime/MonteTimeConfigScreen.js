@@ -64,7 +64,7 @@ const MonteTimeConfigScreen = ({ navigation }) => {
             </Text>
           </View>
           <View style={styles.sliderTrack}>
-            {[2, 4, 6, 8, 10, 12, 14, 16].map(size => (
+            {[3, 4, 6].map(size => (
               <Text
                 key={size}
                 onPress={() => setTeamSize(size)}

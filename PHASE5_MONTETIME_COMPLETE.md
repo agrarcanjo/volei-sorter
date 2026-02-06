@@ -34,7 +34,7 @@ Novo módulo "Montar Time" foi completamente implementado com gerenciamento de j
   - **Gênero** (radio buttons: Masculino/Feminino/Vazio)
   - **Posição** (grid 2x3: levantador, ponta, oposto, central, libero)
   - **Habilidades** (4 sliders 1-10):
-    - Levantamento
+    - levante
     - Ataque
     - Defesa
     - Bloqueio
@@ -90,7 +90,7 @@ Novo módulo "Montar Time" foi completamente implementado com gerenciamento de j
     gender: 'masc' | 'fem' | '',
     position: 'levantador' | 'ponta' | 'oposto' | 'central' | 'libero' | '',
     skills: {
-      levantamento: 0-10,
+      levante: 0-10,
       ataque: 0-10,
       defesa: 0-10,
       bloqueio: 0-10,
