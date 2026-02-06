@@ -147,17 +147,26 @@ const MonteTimeScreen = ({ navigation }) => {
       />
 
       <View style={styles.headerActions}>
+        <View style={{ flex: 1 }} />
         <TouchableOpacity
           onPress={handleAddPlayer}
-          style={[styles.actionButton, { backgroundColor: theme.colors.primary }]}
+          style={[styles.actionButton, { 
+            backgroundColor: theme.colors.primary,
+            ...theme.shadows.md 
+          }]}
         >
-          <Text style={styles.actionIcon}>+</Text>
+          <Text style={[styles.actionIcon, { color: '#FFFFFF' }]}>+</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('MonteTimeConfig')}
-          style={[styles.actionButton, { backgroundColor: theme.colors.cardBackground, borderColor: theme.colors.border, borderWidth: 1 }]}
+          style={[styles.actionButton, { 
+            backgroundColor: theme.colors.cardBackground, 
+            borderColor: theme.colors.border, 
+            borderWidth: 2,
+            ...theme.shadows.sm 
+          }]}
         >
-          <Text style={styles.actionIcon}>⚙️</Text>
+          <Text style={[styles.actionIcon, { color: theme.colors.text }]}>⋮</Text>
         </TouchableOpacity>
       </View>
 
@@ -204,18 +213,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    gap: 10,
+    gap: 12,
   },
   actionButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   actionIcon: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: '600',
   },
   list: {
     flex: 1,

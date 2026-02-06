@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { Container, Header, CustomButton } from '../../components';
 import { useTheme } from '../../context/ThemeContext';
 import { loadPlayers, addPlayer, updatePlayer, createPlayer } from '../../utils/playerStorage';
@@ -79,21 +79,38 @@ const MonteTimePlayerEditScreen = ({ navigation, route }) => {
   };
 
   const renderStars = (skill, value) => {
+    const screenWidth = Dimensions.get('window').width;
+    const isWeb = Platform.OS === 'web';
+    
+    // Calcula o gap dinâmico baseado na plataforma e largura da tela
+    // Web: mais espaço disponível, Android: compacto
+    const dynamicGap = isWeb 
+      ? 15 
+      : screenWidth < 380 ? 2 : 3;
+    
+    const dynamicFontSize = isWeb 
+      ? 16 
+      : screenWidth < 380 ? 18 : 20;
+
     return (
       <View key={skill} style={styles.skillRow}>
         <Text style={[styles.skillLabel, { color: theme.colors.text }]}>
           {skill.charAt(0).toUpperCase() + skill.slice(1)}
         </Text>
-        <View style={styles.starsContainer}>
+        <View style={[styles.starsContainer, { gap: dynamicGap }]}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(star => (
             <TouchableOpacity
               key={star}
               onPress={() => updateSkill(skill, star)}
               style={styles.starButton}
+              hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
             >
               <Text style={[
                 styles.star,
-                { color: star <= value ? theme.colors.primary : theme.colors.border }
+                { 
+                  color: star <= value ? theme.colors.primary : theme.colors.border,
+                  fontSize: dynamicFontSize
+                }
               ]}>
                 ★
               </Text>
@@ -267,27 +284,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
-    gap: 8,
+    gap: 6,
   },
   skillLabel: {
-    width: 80,
+    width: 70,
     fontSize: 13,
     fontWeight: '500',
+    flexShrink: 0,
   },
   starsContainer: {
     flexDirection: 'row',
-    gap: 15,
+    flex: 1,
+    flexWrap: 'nowrap',
   },
   starButton: {
-    padding: 2,
+    padding: 4,
+    minWidth: 24,
+    minHeight: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   star: {
     fontSize: 16,
   },
   skillValue: {
-    width: 35,
+    width: 32,
     fontSize: 12,
     textAlign: 'right',
+    flexShrink: 0,
   },
 });
 

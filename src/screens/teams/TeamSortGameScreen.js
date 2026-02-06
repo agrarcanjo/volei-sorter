@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardLabel: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',

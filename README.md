@@ -69,6 +69,9 @@ npm run ios
 
 # Rodar na web
 npm run web
+
+# build
+eas build --platform android --profile preview
 ```
 
 ## 🏗️ Tecnologias

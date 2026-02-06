@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Container, CustomButton, ThemeToggle } from '../components';
 import { useTheme } from '../context/ThemeContext';
 
@@ -15,20 +15,31 @@ const HomeScreen = ({ navigation }) => {
         {/* Header com Toggle e Configurações */}
         <View style={styles.header}>
           <View style={{ flex: 1 }} />
+          <ThemeToggle showLabel={false} />
           <TouchableOpacity
             onPress={() => navigation.navigate('Settings')}
-            style={styles.settingsButton}
+            style={[
+              styles.settingsButton,
+              {
+                backgroundColor: theme.colors.cardBackground,
+                borderColor: theme.colors.border,
+                ...theme.shadows.sm,
+              },
+            ]}
             accessibilityLabel="Configurações"
             accessibilityRole="button"
           >
-            <Text style={styles.settingsIcon}>⚙️</Text>
+            <Text style={[styles.settingsIcon, { color: theme.colors.text }]}>⋮</Text>
           </TouchableOpacity>
-          <ThemeToggle showLabel={false} />
         </View>
 
         {/* Logo/Título */}
         <View style={styles.logoContainer}>
-          <Text style={[styles.emoji]}>🏐</Text>
+          <Image 
+            source={require('../../assets/logo.png')} 
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
           <Text style={[styles.title, { color: theme.colors.text }]}>
             Vôlei Team Sorter
           </Text>
@@ -98,17 +109,24 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   settingsButton: {
-    padding: 8,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   settingsIcon: {
-    fontSize: 28,
+    fontSize: 26,
+    fontWeight: '600',
   },
   logoContainer: {
     alignItems: 'center',
     marginBottom: 48,
   },
-  emoji: {
-    fontSize: 80,
+  logoImage: {
+    width: 120,
+    height: 120,
     marginBottom: 16,
   },
   title: {

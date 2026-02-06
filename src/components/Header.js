@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, StatusBar } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { hapticLight } from '../utils/haptics';
 
@@ -36,6 +36,9 @@ const Header = ({
     }
   };
 
+  // Calcula o padding top baseado na status bar
+  const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
+
   return (
     <View
       style={[
@@ -43,6 +46,7 @@ const Header = ({
         {
           backgroundColor: theme.colors.background,
           borderBottomColor: theme.colors.border,
+          paddingTop: statusBarHeight + 12,
         },
       ]}
     >
@@ -50,18 +54,12 @@ const Header = ({
       <View style={styles.leftContainer}>
         {showBack && onBack && (
           <TouchableOpacity
-            activeOpacity={0.7}
+            activeOpacity={0.6}
             onPress={handleBack}
-            style={[
-              styles.button,
-              {
-                backgroundColor: theme.colors.cardBackground,
-                borderColor: theme.colors.border,
-                ...theme.shadows.sm,
-              },
-            ]}
+            style={styles.backButton}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Text style={[styles.buttonText, { color: theme.colors.primary }]}>
+            <Text style={[styles.backArrow, { color: theme.colors.text }]}>
               ←
             </Text>
           </TouchableOpacity>
@@ -117,13 +115,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     minHeight: 60,
   },
   leftContainer: {
     flex: 1,
     alignItems: 'flex-start',
+  },
+  backButton: {
+    padding: 8,
+  },
+  backArrow: {
+    fontSize: 32,
+    fontWeight: '300',
+    lineHeight: 32,
   },
   titleContainer: {
     flex: 2,
