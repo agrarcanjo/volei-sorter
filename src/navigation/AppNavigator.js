@@ -10,6 +10,10 @@ import NumberSortConfigScreen from '../screens/numbers/NumberSortConfigScreen.js
 import NumberSortGameScreen from '../screens/numbers/NumberSortGameScreen.js';
 import NextPlayersConfigScreen from '../screens/NextPlayers/NextPlayersConfigScreen.js';
 import NextPlayersGameScreen from '../screens/NextPlayers/NextPlayersGameScreen.js';
+import MonteTimeScreen from '../screens/MonteTime/MonteTimeScreen.js';
+import MonteTimePlayerEditScreen from '../screens/MonteTime/MonteTimePlayerEditScreen.js';
+import MonteTimeConfigScreen from '../screens/MonteTime/MonteTimeConfigScreen.js';
+import MonteTimeSortResultScreen from '../screens/MonteTime/MonteTimeSortResultScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +83,28 @@ const AppNavigator = () => {
           name="Settings" 
           component={SettingsScreen}
           options={{ title: 'Configurações' }}
+        />
+
+        {/* Montar Time Flow */}
+        <Stack.Screen 
+          name="MonteTime" 
+          component={MonteTimeScreen}
+          options={{ title: 'Montar Time' }}
+        />
+        <Stack.Screen 
+          name="MonteTimePlayerEdit" 
+          component={MonteTimePlayerEditScreen}
+          options={{ title: 'Editar Jogador' }}
+        />
+        <Stack.Screen 
+          name="MonteTimeConfig" 
+          component={MonteTimeConfigScreen}
+          options={{ title: 'Configurações' }}
+        />
+        <Stack.Screen 
+          name="MonteTimeSortResult" 
+          component={MonteTimeSortResultScreen}
+          options={{ title: 'Times Sorteados' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

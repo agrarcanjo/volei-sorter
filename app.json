@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "volei-team-sorter",
-    "slug": "volei-team-sorter",
+    "name": "Sorteia Time",
+    "slug": "sorteia-time",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.agrarcanjo.voleiteamsorter"
+      "package": "com.agrarcanjo.sorteiatime"
     },
     "web": {
       "favicon": "./assets/favicon.png"

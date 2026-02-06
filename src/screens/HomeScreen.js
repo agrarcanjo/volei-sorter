@@ -62,6 +62,14 @@ const HomeScreen = ({ navigation }) => {
             fullWidth
             onPress={() => navigation.navigate('NextPlayersConfig')}
           />
+
+          <CustomButton
+            title="🏋️ Montar Time"
+            variant="primary"
+            size="large"
+            fullWidth
+            onPress={() => navigation.navigate('MonteTime')}
+          />
         </View>
 
         {/* Footer */}

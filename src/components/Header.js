@@ -62,7 +62,7 @@ const Header = ({
             ]}
           >
             <Text style={[styles.buttonText, { color: theme.colors.primary }]}>
-              ← Voltar
+              ←
             </Text>
           </TouchableOpacity>
         )}
